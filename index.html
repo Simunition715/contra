@@ -1,0 +1,100 @@
+<html>
+<head>
+	<title>Contra Demo</title>
+	<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+	<div id='player1'></div>
+	<div id='bullets'></div>
+	<div id='world'></div>
+
+	<script type="text/javascript">
+		var steps = 0;
+		var bullets = [];
+		var world = {
+			player: {
+				x: 0,
+				y: 3
+			},
+			mapping: {
+				0: 'sky',
+				1: 'tree',
+				2: 'bridge',
+				3: 'ground',
+				4: 'rock',
+				5: 'canon'
+			},
+			data: [
+				[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+				[0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1],
+				[2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3],
+				[4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3],
+				[4,5,4,5,5,4,4,4,4,3,4,3,3,3,3,3,3,4,5,4,5,5,4,4,4,4,3,4,3,3,3,3,3,3]
+			]
+		};
+
+		function GameLoop()
+		{
+			displayWorld();
+			updateCharacter();
+			displayBullets();
+		}
+		setInterval(GameLoop, 300);
+
+		function updateCharacter()
+		{
+			document.getElementById('player1').style.backgroundPositionX = '-'+(145+steps%3*21)+'px';			
+		}
+
+		function displayBullets()
+		{
+			var output = '';
+			for(var i=0; i<bullets.length; i++)
+			{
+				bullets[i].x += 10;
+				output += "<div class='bullet' style='top: "+bullets[i].y+"px; left: "+bullets[i].x+"px'></div>";
+			}
+			console.log(output);
+			document.getElementById('bullets').innerHTML = output;
+		}
+
+		function displayWorld()
+		{
+			var output = '';
+			for(var i=0; i<world.data.length; i++)
+			{
+				output +="\n<div class='row'>";
+				// console.log(i, world.data[i]);
+				for(var j=world.player.x; j<(world.player.x+7); j++)
+				{
+					output +="<div class='"+world.mapping[world.data[i][j]]+"'></div>";
+				}	
+				output +="</div>";
+			}
+			document.getElementById('world').innerHTML = output;
+		}
+		displayWorld();
+
+		document.onkeydown = function(e)
+		{	if(e.keyCode == 32)
+			{
+				bullets.push({x: 50, y: 150});
+			}
+			if(e.keyCode == 39)
+			{
+				steps++;
+				world.player.x++;
+			}
+			else if(e.keyCode == 37)
+			{
+				steps++;
+				world.player.x--;
+			}
+		}
+
+	</script>
+
+
+</body>
+</html>
